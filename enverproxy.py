@@ -17,7 +17,7 @@ from datetime import datetime
 from slog import slog
 
 config = configparser.ConfigParser()
-config['internal']={}
+config['internal'] = {}
 config['internal']['conf_file'] = '/etc/enverproxy.conf'
 config['internal']['section']   = 'enverproxy'
 config['internal']['version']   = '1.3'
