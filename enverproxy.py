@@ -29,7 +29,7 @@ class Forward:
         if l == None:
             self.__log = slog('Forward class')
         else:
-            self.__log = l    
+            self.__log = l
         self.forward = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def start(self, host, port):
@@ -95,7 +95,7 @@ class TheServer:
                         self.on_recv()
                 except OSError as e:
                     self.__log.logMsg('Main loop socket error: ' + str(e), 3)
-                    time.sleep(1) 
+                    time.sleep(1)
                     if e.errno in (errno.ENOTCONN, errno.ECONNRESET):
                         # Connection was closed abnormally
                         self.on_close(self.s)
@@ -150,7 +150,7 @@ class TheServer:
                 del self.channel[in_s]
                 del self.channel[out_s]
             self.__log.logMsg('Remaining channel dictionary: ' + str(self.channel), 5)
-        
+
     def close_all(self):
         # Close all connections
         self.__log.logMsg('Entering close_all', 5)
@@ -165,7 +165,7 @@ class TheServer:
     def extract(self, data, wrind):
         pos1 = 40 + (wrind*64)
         # Extract information from bytearray
-        #               1        2                    4        4    5    5    6        6    7    7 
+        #               1        2                    4        4    5    5    6        6    7    7
         # 0      6      2        0                    0        8    2    6    0        8    2    6
         # -------------------------------------------------------------------------------------------
         # cmd    cmd    account                       wrid     ?    dc   pwr  totalkWh temp ac   F
@@ -266,7 +266,7 @@ class Signal_handler:
         else:
             self.__log = log
         self.__server = server
-            
+
     def sigterm_handler(self, signal, frame):
         self.__log.logMsg('Received SIGTERM, closing connections', 2)
         self.__server.close_all()
@@ -276,7 +276,7 @@ class Signal_handler:
 
 if __name__ == '__main__':
     # Initial verbositiy level is always 2
-    # Start logging to std.out by default and until config is read 
+    # Start logging to std.out by default and until config is read
     log = slog('Envertec Proxy', verbosity = 2, log_type='sys.stdout')
     # Get configuration data
     if os.path.isfile(config['internal']['conf_file']):
@@ -307,7 +307,7 @@ if __name__ == '__main__':
     port        = int(config['enverproxy']['listen_port'])
     server      = TheServer(host = '', port = port, forward_to = forward_to, delay = delay, buffer_size = buffer_size, log = log)
     server.connect_mqtt(config['enverproxy']['mqtthost'], config['enverproxy']['mqttuser'], config['enverproxy']['mqttpassword'], int(config['enverproxy']['mqttport']))
-    # Catch SIGTERM signals    
+    # Catch SIGTERM signals
     signal.signal(signal.SIGTERM, Signal_handler(server, log).sigterm_handler)
     # Start proxy server
     log.logMsg('Starting server (v' + config['internal']['version'] + ')', 1)
