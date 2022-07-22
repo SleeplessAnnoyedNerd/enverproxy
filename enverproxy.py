@@ -278,6 +278,11 @@ if __name__ == '__main__':
     # Initial verbositiy level is always 2
     # Start logging to std.out by default and until config is read
     log = slog('Envertec Proxy', verbosity = 2, log_type='sys.stdout')
+
+    if (len(sys.argv) == 2):
+      config['internal']['conf_file'] = sys.argv[1]
+      log.logMsg('Using configuration file set by command line ' + config['internal']['conf_file'], 2)
+
     # Get configuration data
     if os.path.isfile(config['internal']['conf_file']):
        config.read(config['internal']['conf_file'])
